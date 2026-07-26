@@ -1,0 +1,113 @@
+{
+  "model_type": "GRU",
+  "seq_len": 8,
+  "hidden_size": 64,
+  "n_layers": 2,
+  "dropout": 0.2,
+  "epochs": 50,
+  "batch_size": 256,
+  "lr": 0.001,
+  "device": "cpu",
+  "horizons_minutes": [
+    30,
+    60
+  ],
+  "p_rated_kw": 1.0,
+  "energy_note": "Energy is a proxy: AC_State \u00d7 P_rated \u00d7 \u0394t. No power meter in CAMaRSEC. Phase 8 replaces with smart plug.",
+  "train_ap_range": "AP01\u2013AP40",
+  "holdout_ap_range": "AP41\u2013AP49",
+  "train_rows": 1401600,
+  "holdout_rows": 245280,
+  "input_features": [
+    "T_Indoor",
+    "RH_Indoor",
+    "T_Outdoor",
+    "RH_Outdoor",
+    "AC_State",
+    "setpoint_proxy",
+    "GHI",
+    "Occupancy_State",
+    "hour_sin",
+    "hour_cos"
+  ],
+  "metrics": {
+    "train_T": {
+      "T_Indoor_t30": {
+        "MAE": 0.2927,
+        "RMSE": 0.4544,
+        "R2": 0.9192
+      },
+      "T_Indoor_t60": {
+        "MAE": 0.4328,
+        "RMSE": 0.6351,
+        "R2": 0.8453
+      }
+    },
+    "val_T": {
+      "T_Indoor_t30": {
+        "MAE": 0.3533,
+        "RMSE": 0.5448,
+        "R2": 0.8405
+      },
+      "T_Indoor_t60": {
+        "MAE": 0.5315,
+        "RMSE": 0.7727,
+        "R2": 0.6878
+      }
+    },
+    "holdout_T": {
+      "T_Indoor_t30": {
+        "MAE": 0.2394,
+        "RMSE": 0.3563,
+        "R2": 0.9321
+      },
+      "T_Indoor_t60": {
+        "MAE": 0.3549,
+        "RMSE": 0.5096,
+        "R2": 0.865
+      }
+    },
+    "train_RH": {
+      "RH_Indoor_t30": {
+        "MAE": 3.1451,
+        "RMSE": 4.554,
+        "R2": 0.8104
+      },
+      "RH_Indoor_t60": {
+        "MAE": 4.0198,
+        "RMSE": 5.5135,
+        "R2": 0.7421
+      }
+    },
+    "val_RH": {
+      "RH_Indoor_t30": {
+        "MAE": 3.3642,
+        "RMSE": 4.7173,
+        "R2": 0.73
+      },
+      "RH_Indoor_t60": {
+        "MAE": 4.3507,
+        "RMSE": 5.8063,
+        "R2": 0.624
+      }
+    },
+    "holdout_RH": {
+      "RH_Indoor_t30": {
+        "MAE": 2.5731,
+        "RMSE": 3.5887,
+        "R2": 0.7601
+      },
+      "RH_Indoor_t60": {
+        "MAE": 3.3049,
+        "RMSE": 4.4002,
+        "R2": 0.6747
+      }
+    }
+  },
+  "energy_proxy_stats_holdout": {
+    "mean_kWh_per_step": 0.0149,
+    "max_kWh_per_step": 0.25,
+    "formula": "AC_State \u00d7 1.0 kW \u00d7 15/60 h",
+    "limitation": "No power meter in CAMaRSEC. Replace in Phase 8."
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "env_model_path": "Env_model/env_model_gru",
+  "comfort_model_path": "outputs/bayesian_preference/comfort_gaussian_params.json",
+  "preference_csv": "bayesian_preference_results.csv",
+  "policy": "output/ppo_hvac.zip",
+  "policy_algo": "PPO",
+  "episodes_per_apt": 3,
+  "episode_length": 96,
+  "n_apartments": 37,
+  "controllers": [
+    "RL_PPO",
+    "Fixed_26C",
+    "Fixed_27C",
+    "Rule_Based",
+    "Random",
+    "Rule_Bayesian"
+  ],
+  "phase5_real_env": true,
+  "energy_model": {
+    "type": "Inverter AC model (cooling_load \u00d7 COP)",
+    "Q_rated_kw": 2.64,
+    "COP_rated": 3.52,
+    "formula": "Load=clip(\u0394T/5,0,1); Q=Load\u00d7Q_rated; COP=COP_rated\u00d7(1-0.015\u00d7(T_out-35)); P=Q/COP; E=P\u00d70.25h",
+    "COP_range": [
+      2.2,
+      4.5
+    ],
+    "note": "Phase 8 replaces with smart plug measurements."
+  }
+}

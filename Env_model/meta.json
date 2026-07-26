@@ -1,0 +1,18 @@
+{
+  "seq_len": 8,
+  "n_features": 10,
+  "input_features": [
+    "T_Indoor",
+    "RH_Indoor",
+    "T_Outdoor",
+    "RH_Outdoor",
+    "AC_State",
+    "setpoint_proxy",
+    "GHI",
+    "Occupancy_State",
+    "hour_sin",
+    "hour_cos"
+  ],
+  "hidden_size": 64,
+  "n_layers": 2
+}

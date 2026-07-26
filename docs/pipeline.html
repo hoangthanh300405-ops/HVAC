@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #0f1117; color: #e2e8f0; padding: 32px; }
+
+  h1 { text-align: center; color: #e2e8f0; font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+  h2 { text-align: center; color: #64748b; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  .subtitle { text-align: center; font-size: 11px; color: #475569; margin-bottom: 32px; line-height: 1.7; }
+  .subtitle span { background: #1e293b; border-radius: 4px; padding: 2px 8px; margin: 2px; display: inline-block; }
+
+  .pipeline { display: flex; flex-direction: column; gap: 0; max-width: 920px; margin: 0 auto; }
+
+  /* PHASE BLOCKS */
+  .phase { border-radius: 12px; padding: 20px 24px; margin-bottom: 4px; position: relative; }
+  .phase-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; margin-bottom: 10px; }
+  .phase-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .phase-desc { font-size: 12px; color: #94a3b8; line-height: 1.6; margin-bottom: 2px; }
+
+  .p1  { background: #1e293b; border-left: 4px solid #6366f1; } .p1  .phase-label { color: #818cf8; }
+  .p2  { background: #1e293b; border-left: 4px solid #0ea5e9; } .p2  .phase-label { color: #38bdf8; }
+  .p3  { background: #1e293b; border-left: 4px solid #8b5cf6; } .p3  .phase-label { color: #a78bfa; }
+  .p4  { background: #1e293b; border-left: 4px solid #10b981; } .p4  .phase-label { color: #34d399; }
+  .p5  { background: #1e293b; border-left: 4px solid #f59e0b; } .p5  .phase-label { color: #fbbf24; }
+  .p6  { background: #1e293b; border-left: 4px solid #ef4444; } .p6  .phase-label { color: #f87171; }
+  .p7  { background: #1e293b; border-left: 4px solid #ec4899; } .p7  .phase-label { color: #f472b6; }
+  .p8  { background: #1e293b; border-left: 4px solid #14b8a6; } .p8  .phase-label { color: #2dd4bf; }
+
+  /* ARROW */
+  .arrow { text-align: center; font-size: 20px; color: #334155; line-height: 1; padding: 2px 0; }
+
+  /* INNER BOXES */
+  .boxes { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+  .box { background: #0f172a; border-radius: 8px; padding: 10px 14px; flex: 1; min-width: 155px; }
+  .box-title { font-size: 11px; font-weight: 700; margin-bottom: 5px; }
+  .box-body { font-size: 11px; color: #64748b; line-height: 1.65; }
+
+  .b-indigo .box-title { color: #818cf8; }
+  .b-sky    .box-title { color: #38bdf8; }
+  .b-violet .box-title { color: #a78bfa; }
+  .b-green  .box-title { color: #34d399; }
+  .b-amber  .box-title { color: #fbbf24; }
+  .b-red    .box-title { color: #f87171; }
+  .b-pink   .box-title { color: #f472b6; }
+  .b-teal   .box-title { color: #2dd4bf; }
+  .b-slate  .box-title { color: #94a3b8; }
+
+  /* FORMULA / CODE BLOCK */
+  .formula-block { background: #0f172a; border-radius: 10px; padding: 14px 18px; margin-top: 12px; font-size: 11px; }
+  .formula-block .formula { color: #e2e8f0; font-family: 'Courier New', monospace; font-size: 12px; line-height: 1.9; }
+  .formula-block .terms { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .term { border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 600; }
+  .t-amber  { background: #451a03; color: #fbbf24; }
+  .t-sky    { background: #082f49; color: #38bdf8; }
+  .t-green  { background: #052e16; color: #34d399; }
+  .t-slate  { background: #1e293b; color: #94a3b8; }
+  .t-red    { background: #450a0a; color: #f87171; }
+  .t-violet { background: #2e1065; color: #a78bfa; }
+  .t-pink   { background: #500724; color: #f472b6; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 11px; }
+  th { background: #0f172a; color: #64748b; font-weight: 700; padding: 7px 10px; text-align: left; letter-spacing: 0.5px; }
+  td { padding: 7px 10px; color: #94a3b8; border-top: 1px solid #1e293b; vertical-align: top; line-height: 1.55; }
+  td:first-child { color: #e2e8f0; font-weight: 600; }
+
+  /* OUTPUT / CHIP */
+  .output { background: #0f172a; border: 1px solid #1e293b; border-radius: 10px; padding: 14px 18px; margin-top: 14px; }
+  .output-label { font-size: 10px; color: #475569; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .output-row { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+  .chip { border-radius: 20px; padding: 4px 12px; font-size: 11px; font-weight: 600; }
+  .c-green  { background: #052e16; color: #34d399; }
+  .c-sky    { background: #082f49; color: #38bdf8; }
+  .c-amber  { background: #451a03; color: #fbbf24; }
+  .c-violet { background: #2e1065; color: #a78bfa; }
+  .c-red    { background: #450a0a; color: #f87171; }
+  .c-pink   { background: #500724; color: #f472b6; }
+  .c-teal   { background: #042f2e; color: #2dd4bf; }
+  .c-slate  { background: #1e293b; color: #94a3b8; }
+
+  /* DATA TAG */
+  .data-tag { display: inline-block; background: #1e293b; border-radius: 6px; padding: 2px 8px; font-size: 10px; color: #64748b; margin-right: 4px; margin-top: 5px; }
+
+  /* SECTION DIVIDER */
+  .section-divider { height: 1px; background: linear-gradient(to right, transparent, #1e293b, transparent); margin: 20px 0; }
+
+  /* FLOW STEP */
+  .flow-steps { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
+  .flow-step { display: flex; align-items: flex-start; gap: 12px; }
+  .flow-num { min-width: 22px; height: 22px; border-radius: 50%; background: #1e293b; font-size: 11px; font-weight: 700; color: #64748b; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .flow-text { font-size: 11px; color: #94a3b8; line-height: 1.65; }
+  .flow-text strong { color: #e2e8f0; }
+
+</style>
+</head>
+<body>
+
+<h1>Pipeline RL-HVAC · Bayesian Preference Learning</h1>
+<h2>Kiến trúc Mô hình Đầy đủ</h2>
+<div class="subtitle">
+  <span>Data-driven Surrogate Environment</span>
+  <span>Bayesian User Preference</span>
+  <span>Personalized Reward</span>
+  <span>Minimal Sensing</span>
+  <br>
+  <span style="color:#475569;">Điều khiển điều hòa phòng đơn — Mùa hè nóng ẩm Việt Nam</span>
+</div>
+
+<div class="pipeline">
+
+  <!-- ===================== PHASE 1 ===================== -->
+  <div class="phase p1">
+    <div class="phase-label">Phase 1 — Dataset Preparation</div>
+    <div class="phase-title">Chuẩn bị dữ liệu & Feature Mapping</div>
+    <div class="phase-desc">Chuẩn hóa CAMaRSEC/AP1_BR, lọc Chinese comfort subset phù hợp khí hậu nóng ẩm, chuẩn hóa feature tối thiểu</div>
+    <div class="boxes">
+      <div class="box b-indigo">
+        <div class="box-title">CAMaRSEC / AP1_BR (Hà Nội)</div>
+        <div class="box-body">49 căn hộ · 15 phút/mẫu<br>T_Indoor, RH_Indoor<br>T_Outdoor, RH_Outdoor<br>AC_State, Occupancy, CO2<br>→ Pretrain env model</div>
+      </div>
+      <div class="box b-indigo">
+        <div class="box-title">Chinese Thermal Comfort Dataset</div>
+        <div class="box-body">41,977+ mẫu · lọc subset<br>Ưu tiên: trường học/ĐH,<br>mùa hè, Quảng Đông<br>→ Comfort prior p(T*, RH*)</div>
+      </div>
+      <div class="box b-indigo">
+        <div class="box-title">Feature Tối thiểu (Bắt buộc)</div>
+        <div class="box-body">indoor_temp, indoor_RH<br>outdoor_temp, outdoor_RH<br>AC_on/off, AC_setpoint<br>hour_sin, hour_cos<br>+ lag features (prev T, RH, SP)</div>
+      </div>
+      <div class="box b-indigo">
+        <div class="box-title">Weather API (bổ sung)</div>
+        <div class="box-body">Fill outdoor T/RH khi thiếu<br>Solar radiation (GHI)<br>Theo timestamp thực tế</div>
+      </div>
+    </div>
+    <div style="margin-top:10px;">
+      <span class="data-tag">Output: Dataset env sạch</span>
+      <span class="data-tag">Chinese comfort subset</span>
+      <span class="data-tag">Feature vector đã chuẩn hóa</span>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ===================== PHASE 2 ===================== -->
+  <div class="phase p2">
+    <div class="phase-label">Phase 2 — Environment Model</div>
+    <div class="phase-title">Data-driven Surrogate Environment</div>
+    <div class="phase-desc">Học động học phòng từ dữ liệu cảm biến — dự đoán trạng thái tiếp theo mỗi 5–15 phút, thay thế EnergyPlus</div>
+
+    <div class="boxes">
+      <div class="box b-sky">
+        <div class="box-title">Input X_t (State + Action)</div>
+        <div class="box-body">indoor_temp_t, indoor_RH_t<br>outdoor_temp_t, outdoor_RH_t<br>AC_on_off_t, AC_setpoint_t<br>hour_sin_t, hour_cos_t<br>prev_temp, prev_RH, prev_setpoint</div>
+      </div>
+      <div class="box b-sky">
+        <div class="box-title">Model (theo giai đoạn)</div>
+        <div class="box-body"><strong style="color:#38bdf8;">Giai đoạn đầu:</strong><br>Linear Regression + lags<br>Random Forest · XGBoost/LightGBM<br><br><strong style="color:#38bdf8;">Giai đoạn sau:</strong><br>LSTM / GRU / TCN<br>Grey-box RC · Gaussian Process</div>
+      </div>
+      <div class="box b-sky">
+        <div class="box-title">Output y_t+1 (State tiếp theo)</div>
+        <div class="box-body">indoor_temp_t+1<br>indoor_RH_t+1<br>energy_kWh_t+1<br><br><em style="color:#475569;">Proxy: AC_State làm<br>proxy energy giai đoạn đầu</em></div>
+      </div>
+    </div>
+
+    <div class="formula-block" style="margin-top:12px;">
+      <div class="formula">state_t + action_t  →  state_t+1</div>
+      <div class="formula">f(X_t)  =  [T_next, RH_next, energy_next]</div>
+    </div>
+
+    <table>
+      <tr><th>Metric đánh giá Env Model</th><th>Mô tả</th></tr>
+      <tr><td>MAE / RMSE nhiệt độ</td><td>Sai lệch dự đoán T_next (°C)</td></tr>
+      <tr><td>MAE / RMSE độ ẩm</td><td>Sai lệch dự đoán RH_next (%)</td></tr>
+      <tr><td>MAE energy</td><td>Sai lệch dự đoán điện năng (kWh)</td></tr>
+      <tr><td>Inference time</td><td>Phải đủ nhanh để train RL trong vòng lặp</td></tr>
+    </table>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ===================== PHASE 3 ===================== -->
+  <div class="phase p3">
+    <div class="phase-label">Phase 3 — Bayesian Preference Learning</div>
+    <div class="phase-title">Ước lượng T* và RH* — Nhiệt độ & Độ ẩm ưa thích người dùng</div>
+    <div class="phase-desc">Suy luận preference ẩn từ hành vi bật/tắt AC, đổi setpoint, thời gian không bật lại, và ngữ cảnh môi trường</div>
+
+    <div class="boxes">
+      <div class="box b-violet">
+        <div class="box-title">Prior p(θ) — Chinese Dataset</div>
+        <div class="box-body">θ = [T*, RH*]<br>T* ~ Normal(μ_T_China, σ²_T)<br>RH* ~ Normal(μ_RH_China, σ²_RH)<br>→ Subset mùa hè, Quảng Đông</div>
+      </div>
+      <div class="box b-violet">
+        <div class="box-title">Likelihood p(D|θ, context)</div>
+        <div class="box-body">P(AC_on|θ,x) = sigmoid(k_T·(T-T*) + k_RH·(RH-RH*))<br>P(AC_off_stable|θ,x) = Gaussian comfort<br>P(setpoint_down|θ,x) = sigmoid(...)<br>P(setpoint_up|θ,x) = sigmoid(...)</div>
+      </div>
+      <div class="box b-violet">
+        <div class="box-title">Behavior Data D (Hành vi VN)</div>
+        <div class="box-body">AC_on / AC_off events<br>Setpoint changes<br>Không bật lại &gt; 30 phút<br>User feedback (nếu có)<br>Context: T_in, RH_in, time, occupancy</div>
+      </div>
+    </div>
+
+    <div class="formula-block">
+      <div class="formula">p(θ | D)  ∝  p(D | θ, context) · p(θ)</div>
+      <div class="formula">θ = [T*, RH*]   →   Posterior: T*±σ_T, RH*±σ_RH</div>
+      <div class="terms">
+        <div class="term t-violet">θ = [T*, RH*] — Preference ẩn</div>
+        <div class="term t-slate">p(θ) — Prior China subset</div>
+        <div class="term t-violet">p(D|θ,ctx) — Likelihood hành vi</div>
+        <div class="term t-sky">p(θ|D) — Posterior cá nhân</div>
+      </div>
+    </div>
+
+    <div style="margin-top:12px;">
+      <span class="data-tag">Output: T*_user</span>
+      <span class="data-tag">RH*_user</span>
+      <span class="data-tag">σ_T uncertainty</span>
+      <span class="data-tag">σ_RH uncertainty</span>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ===================== PHASE 4 ===================== -->
+  <div class="phase p4">
+    <div class="phase-label">Phase 4 — Personalized Reward Function</div>
+    <div class="phase-title">Reward Cá nhân hóa — Dùng T* và RH* từ Bayesian PL</div>
+    <div class="phase-desc">Thay comfort zone cứng (T_min/T_max/RH_max) bằng comfort score Gaussian quanh T* và RH*</div>
+
+    <div class="boxes">
+      <div class="box b-green">
+        <div class="box-title">Temperature Comfort S_T</div>
+        <div class="box-body">S_T(T_t) = exp(−(T_t−T*)² / 2σ_T²)<br>σ_T = 1.5 · α_T = 0.6<br>S_T=1 khi T_t=T*<br>Giảm dần khi xa T*</div>
+      </div>
+      <div class="box b-green">
+        <div class="box-title">Humidity Comfort S_RH</div>
+        <div class="box-body">S_RH(RH_t) = exp(−(RH_t−RH*)² / 2σ_RH²)<br>σ_RH = 8 · α_RH = 0.4<br>Phản ánh khí hậu nóng ẩm<br>Chống cảm giác bí/ẩm</div>
+      </div>
+      <div class="box b-green">
+        <div class="box-title">Energy Penalty D_E</div>
+        <div class="box-body">D_E = clip((e_t−e_min)/(e_max−e_min), 0,1)<br>w_E = 1.0<br>Proxy: AC_State giai đoạn đầu<br>Smart plug khi tự thu</div>
+      </div>
+      <div class="box b-green">
+        <div class="box-title">Action Penalty D_A</div>
+        <div class="box-body">D_SP = |SP_t − SP_{t-1}| / range<br>D_ON = 1(u_t ≠ u_{t-1})<br>D_A = λ_SP·D_SP + λ_ON·D_ON + λ_I·interaction<br>w_A = 0.3</div>
+      </div>
+      <div class="box b-red">
+        <div class="box-title">Safety Penalty D_S (Hard)</div>
+        <div class="box-body">I_T: T &lt; 20°C hay T &gt; 32°C<br>I_RH: RH &gt; 85%<br>I_SW: switch &gt; 6 lần/giờ<br>D_S = clip(I_T+I_RH+I_SW,0,1) · w_S=50</div>
+      </div>
+    </div>
+
+    <div class="formula-block">
+      <div class="formula">C_t = α_T · S_T(T_t) + α_RH · S_RH(RH_t)</div>
+      <div class="formula">R_raw = w_C·C_t − w_E·D_E − w_A·D_A − w_S·D_S</div>
+      <div class="formula">r_t = 2 · clip((R_raw + w_E+w_A+w_S)/(w_C+w_E+w_A+w_S), 0,1) − 1   ∈ [−1, 1]</div>
+      <div class="terms">
+        <div class="term t-green">w_C=2.0 · comfort</div>
+        <div class="term t-amber">w_E=1.0 · energy</div>
+        <div class="term t-slate">w_A=0.3 · action smoothness</div>
+        <div class="term t-red">w_S=50.0 · safety (hard)</div>
+        <div class="term t-sky">σ_T=1.5 · σ_RH=8</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ===================== PHASE 5 ===================== -->
+  <div class="phase p5">
+    <div class="phase-label">Phase 5 — RL Environment (Gym)</div>
+    <div class="phase-title">Đóng gói Gymnasium Environment</div>
+    <div class="phase-desc">Kết hợp Surrogate Env + Reward Function thành Gym-compatible environment để train policy</div>
+
+    <div class="boxes">
+      <div class="box b-amber">
+        <div class="box-title">State Space s_t</div>
+        <div class="box-body">indoor_temp_t, indoor_RH_t<br>outdoor_temp_t, outdoor_RH_t<br>current_setpoint_t, AC_on_off_t<br>hour_sin_t, hour_cos_t<br>occupancy_t (nếu có)<br><em style="color:#475569;">+ T*, RH* từ Bayesian (fixed/adaptive)</em></div>
+      </div>
+      <div class="box b-amber">
+        <div class="box-title">Action Space a_t</div>
+        <div class="box-body"><strong style="color:#fbbf24;">Discrete:</strong><br>{off, 24°C, 25°C, 26°C, 27°C, 28°C}<br>→ DQN hoặc PPO<br><br><strong style="color:#fbbf24;">Continuous:</strong><br>[setpoint ∈ 24–28°C]<br>→ SAC, TD3, DDPG</div>
+      </div>
+      <div class="box b-amber">
+        <div class="box-title">Gym API</div>
+        <div class="box-body">env.reset() → s_0<br>env.step(a_t) →<br>(s_t+1, r_t, done, info)<br><br>info: T_next, RH_next,<br>energy, comfort_score,<br>safety_violation</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ===================== PHASE 6 ===================== -->
+  <div class="phase p6">
+    <div class="phase-label">Phase 6 — RL Policy Training</div>
+    <div class="phase-title">Huấn luyện Policy Trên Surrogate Environment</div>
+    <div class="phase-desc">Agent học chọn setpoint/on-off tối ưu hóa reward cá nhân hóa từ T* và RH*</div>
+
+    <div class="boxes">
+      <div class="box b-red">
+        <div class="box-title">Discrete Action</div>
+        <div class="box-body">DQN — đơn giản, ổn định<br>PPO — on-policy, phổ biến<br>→ Khuyến nghị: PPO trước</div>
+      </div>
+      <div class="box b-red">
+        <div class="box-title">Continuous Action</div>
+        <div class="box-body">SAC — entropy regularized<br>TD3 — ổn định, offline-friendly<br>DDPG — continuous baseline</div>
+      </div>
+      <div class="box b-red">
+        <div class="box-title">Offline / Safe RL</div>
+        <div class="box-body">CQL / IQL / TD3+BC<br>→ Khi có nhiều log vận hành<br>Safe RL + Action Masking<br>→ Tránh vi phạm safety constraint</div>
+      </div>
+    </div>
+
+    <div class="flow-steps" style="margin-top:14px;">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-text"><strong>Agent</strong> quan sát s_t (T_in, RH_in, T_out, setpoint, hour, T*, RH*)</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-text"><strong>Policy π(a|s)</strong> chọn action a_t (setpoint hoặc on/off)</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-text"><strong>Surrogate Env</strong> dự đoán s_t+1 = [T_next, RH_next, energy_next]</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">4</div>
+        <div class="flow-text"><strong>Reward Function</strong> tính r_t dùng T*, RH* → cập nhật policy</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">5</div>
+        <div class="flow-text"><strong>Lặp lại</strong> đến khi policy hội tụ; fine-tune với dữ liệu thực</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ===================== PHASE 7 ===================== -->
+  <div class="phase p7">
+    <div class="phase-label">Phase 7 — Evaluation & Baselines</div>
+    <div class="phase-title">So sánh Baseline & Đánh giá</div>
+    <div class="phase-desc">So sánh RL + Bayesian preference với các baseline phổ biến trên cùng dữ liệu và metric</div>
+
+    <div class="output">
+      <div class="output-label">Baseline Controllers</div>
+      <div class="output-row">
+        <div class="chip c-green">✓ RL + Bayesian T*/RH* (đề xuất)</div>
+        <div class="chip c-slate">RL Temperature-only (không có preference)</div>
+        <div class="chip c-sky">Rule-based: if hot → giảm setpoint</div>
+        <div class="chip c-amber">Fixed setpoint 26°C</div>
+        <div class="chip c-amber">Fixed setpoint 27°C</div>
+        <div class="chip c-pink">Manual control (người dùng tự chỉnh)</div>
+      </div>
+    </div>
+
+    <table style="margin-top:12px;">
+      <tr><th>Nhóm Metric</th><th>Metric cụ thể</th></tr>
+      <tr><td>Environment Model</td><td>MAE/RMSE nhiệt độ · MAE/RMSE độ ẩm · MAE energy · Inference time</td></tr>
+      <tr><td>Preference Model</td><td>Posterior uncertainty σ_T, σ_RH · Prediction likelihood · Số hành vi cần để ổn định T*, RH*</td></tr>
+      <tr><td>RL Controller</td><td>Total energy (kWh) · Comfort score (S_T, S_RH) · Action changes · Switch frequency · Safety violations</td></tr>
+      <tr><td>Triển khai thực tế</td><td>Chi phí cảm biến · Feature tối thiểu · Khả năng chạy thiếu data · Compatible điều hòa cục bộ</td></tr>
+    </table>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ===================== PHASE 8 ===================== -->
+  <div class="phase p8">
+    <div class="phase-label">Phase 8 — Real-world Pilot & Fine-tuning</div>
+    <div class="phase-title">Triển khai Thực tế & Cập nhật Posterior</div>
+    <div class="phase-desc">Thu dữ liệu thực tế office/classroom Việt Nam, fine-tune env model, cập nhật preference posterior → policy ngày càng cá nhân hóa hơn</div>
+
+    <div class="boxes">
+      <div class="box b-teal">
+        <div class="box-title">Thu dữ liệu thực tế</div>
+        <div class="box-body">Office / classroom VN<br>Smart plug đo energy thật<br>Cảm biến T/RH indoor<br>AC setpoint log<br>Occupancy (nếu có)</div>
+      </div>
+      <div class="box b-teal">
+        <div class="box-title">Fine-tune Env Model</div>
+        <div class="box-body">Pretrain: CAMaRSEC<br>Fine-tune: dữ liệu tự thu<br>Cập nhật transition dynamics<br>Thêm setpoint + energy thật</div>
+      </div>
+      <div class="box b-teal">
+        <div class="box-title">Update Preference Posterior</div>
+        <div class="box-body">Hành vi mới → update p(T*,RH*|D)<br>Active learning: hỏi khi σ cao<br>T*, RH* ngày càng cá nhân hóa<br>→ Reward tốt hơn</div>
+      </div>
+      <div class="box b-teal">
+        <div class="box-title">Hướng mở rộng tương lai</div>
+        <div class="box-body">Active Bayesian PL (hỏi khi bất định)<br>Preference-aware Meta-RL<br>Offline RL (CQL, IQL)<br>Safe RL + Action Masking<br>Tối ưu feature tối thiểu</div>
+      </div>
+    </div>
+
+    <div class="output" style="margin-top:14px;">
+      <div class="output-label">Output cuối cùng</div>
+      <div class="output-row">
+        <div class="chip c-teal">Policy HVAC cá nhân hóa</div>
+        <div class="chip c-green">T*, RH* ổn định theo người dùng</div>
+        <div class="chip c-sky">Env model calibrated theo VN</div>
+        <div class="chip c-amber">Tiết kiệm năng lượng vs baseline</div>
+        <div class="chip c-violet">Comfort score &gt; fixed setpoint</div>
+      </div>
+      <div style="font-size:11px; color:#475569; margin-top:10px;">
+        Metrics: Energy (kWh) · Comfort S_T, S_RH · Preference convergence · Safety violations · Deployment cost
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ROLE TABLE -->
+<div style="max-width:920px; margin: 28px auto 0; background:#1e293b; border-radius:12px; padding:20px 24px;">
+  <div style="font-size:11px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:14px;">Vai trò của từng Model trong Pipeline</div>
+  <table>
+    <tr>
+      <th>Model</th><th>Input</th><th>Output</th><th>Vai trò</th>
+    </tr>
+    <tr>
+      <td>Environment Model</td>
+      <td>state_t, action_t</td>
+      <td>T_next, RH_next, energy_next</td>
+      <td>Mô phỏng phản ứng nhiệt/ẩm của phòng</td>
+    </tr>
+    <tr>
+      <td>Bayesian Preference Model</td>
+      <td>behavior, context, prior</td>
+      <td>Posterior T*, RH* ± σ</td>
+      <td>Ước lượng sở thích nhiệt/ẩm cá nhân</td>
+    </tr>
+    <tr>
+      <td>Reward Function</td>
+      <td>T_next, RH_next, energy, action, T*, RH*</td>
+      <td>r_t ∈ [−1, 1]</td>
+      <td>Đánh giá action: comfort cá nhân + năng lượng + an toàn</td>
+    </tr>
+    <tr>
+      <td>Policy Model (RL)</td>
+      <td>state_t (bao gồm T*, RH*)</td>
+      <td>action_t (setpoint / on-off)</td>
+      <td>Chọn hành động HVAC tối ưu tại mỗi bước</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

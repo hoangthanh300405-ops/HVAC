@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Large data files — kept locally on disk, NOT tracked in git
+# (final_dataset_with_setpoint_proxy.csv alone is ~400MB — exceeds GitHub's
+# 100MB per-file limit. Use Git LFS or external storage if you need to
+# version-control these.)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Generated Phase 3 outputs (regenerate with bayesian_learning.py)
+outputs/
+bayesian_preference_results.csv
+
+# Experiment outputs (keep only the curated results/ folder, not ad-hoc runs)
+results/run*/
+results/_smoketest*/
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
